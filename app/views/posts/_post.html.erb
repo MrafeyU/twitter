@@ -6,8 +6,7 @@
   <div>
     <strong>Content:</strong>
     <br/>
-    <%= post.content %>
-  </div>
+    <%= post.content.body.to_s.html_safe %>
   <div>
     <br/>
     <strong>User_id:</strong>
