@@ -9,3 +9,5 @@
 
   <%= button_to "Destroy this post", @post, method: :delete %>
 </div>
+
+<%= render "comments/comments", post: @post%>

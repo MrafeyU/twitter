@@ -1,14 +1,16 @@
 <div>
+  <h2>
 <%= link_to "HOME", root_path%>
-<%= link_to "POST'S", posts_path%>
-
+<%= link_to "POSTS", posts_path%>
 
 <% if current_user%>
 <%= link_to "SIGN OUT ", destroy_user_session_path, data: {turbo_method: :delete}%>
+<%= link_to "Account", edit_user_registration_path%>
+
 <% else%>
 <%= link_to "SIGN IN ", new_user_session_path%>
 <%= link_to "SIGN UP ", new_user_registration_path%>
+
 <%end%>
-
-
+</h2>
 </div>

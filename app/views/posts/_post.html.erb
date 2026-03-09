@@ -3,17 +3,14 @@
     <strong> <%= post.title %></strong>
   </div>
 
- <div>
-    <strong>Content:</strong>
-    <br/>
-    <%# Use the rich_text_area tag helper logic by simply outputting the object %>
+   <div>
+    <%= post.user&.user_name || "Unknown Author" %>
+    <%= time_tag post.created_at%><br/>
+
     <div class="trix-content">
       <%= post.content %>
     </div>
   </div>
-    <br/>
-    <strong>User_id:</strong>
-    <%= post.user_id %>
   </div>
 
 
