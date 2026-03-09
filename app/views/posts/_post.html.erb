@@ -3,11 +3,14 @@
     <strong> <%= post.title %></strong>
   </div>
 
-  <div>
+ <div>
     <strong>Content:</strong>
     <br/>
-    <%= post.content.body.to_s.html_safe %>
-  <div>
+    <%# Use the rich_text_area tag helper logic by simply outputting the object %>
+    <div class="trix-content">
+      <%= post.content %>
+    </div>
+  </div>
     <br/>
     <strong>User_id:</strong>
     <%= post.user_id %>
