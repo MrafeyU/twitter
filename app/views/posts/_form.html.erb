@@ -1,8 +1,7 @@
-<%= form_with(model: post) do |form| %>
+<%= form_with(model: post,class: "p-3 border rounded bg-light") do |form| %>
   <% if post.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(post.errors.count, "error") %> prohibited this post from being saved:</h2>
-
       <ul>
         <% post.errors.each do |error| %>
           <li><%= error.full_message %></li>
@@ -11,17 +10,36 @@
     </div>
   <% end %>
 
+  <%= form.text_field :user_id, value: current_user.id, style: "display:none;" if current_user %> <br>
+
   <div>
     <%= form.label :title, style: "display: block" %>
     <%= form.text_field :title %>
   </div>
 
-  <div>
+  <div class="mb-3">
     <%= form.label :content, style: "display: block" %>
     <%= form.rich_text_area :content %>
   </div>
-  <%= form.text_field :user_id, value: current_user.id, style: "display:none;" if current_user %> <br>
+  
+  
+  <div>
+    <%= form.label :attachments, style: "display: block" %>
+    <%= form.file_field :attachments, multiple: true %>
+    <% if post.attachments.attached? %>
+    <h4>Current Attachments</h4>
+        <% post.attachments.each do |attachment| %>
+          <div>
+            <%= image_tag attachment, width: 150 if attachment.image? %>
 
+            <%= link_to "Remove",
+                remove_attachment_post_path(post, attachment_id: attachment.id),
+                data: { turbo_method: :delete, turbo_confirm: "Remove this attachment?" } %>
+          </div>
+        <% end %>
+      <% end %>
+</div>
+  
   <div>
     <%= form.submit %>
   </div>

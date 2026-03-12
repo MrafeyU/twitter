@@ -1,12 +1,13 @@
 Rails.application.routes.draw do
-  resources :likes
    devise_for :users, controllers: {
         sessions: "users/sessions",
         registrations: "users/registrations"
       }
   resources :posts do
-    resources :likes
-    resources :comments
+    member do
+      delete :remove_attachment
+    end
+    resources :comments 
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

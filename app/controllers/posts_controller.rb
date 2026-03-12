@@ -4,11 +4,13 @@ class PostsController < ApplicationController
 
   # GET /posts or /posts.json
   def index
-    @posts = Post.all
+    @posts = Post.all.with_attached_attachments.order(created_at: :desc)
+    
   end
 
   # GET /posts/1 or /posts/1.json
   def show
+    @post.increment!(:views)
     # render json: @post
   end
 
@@ -59,6 +61,14 @@ class PostsController < ApplicationController
     end
   end
 
+  def remove_attachment
+  @post = Post.find(params[:id])
+  attachment = @post.attachments.find(params[:attachment_id])
+  attachment.purge
+
+  redirect_back fallback_location: edit_post_path(@post)
+end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_post
@@ -67,6 +77,6 @@ class PostsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def post_params
-      params.expect(post: [ :title, :content, :user_id ])
+      params.expect(post: [ :title, :content, :user_id, attachments: [] ])
     end
 end
