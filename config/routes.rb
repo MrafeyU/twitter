@@ -4,8 +4,9 @@ Rails.application.routes.draw do
         registrations: "users/registrations"
       }
   resources :posts do
-    member do
+    collection do
       delete :remove_attachment
+      get :search
     end
     resources :comments 
   end

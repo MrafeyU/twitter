@@ -1,9 +1,9 @@
-<div class="p-3 border rounded bg-light">
-<%= form_with model: [post, Comment.new]  do |f|%>
+<div class="card mb-3 shadow-sm">
+<%= form_with model: [post, Comment.new],class: "form"  do |f|%>
     Your Comment: <br>
-    <%= f.text_area :content%> <br>
+    <%= f.text_area :content, class: "form-control"%> <br>
     <%= f.text_field :user_id, value: current_user.id, style: "display:none;" if current_user %> <br>
-    <%= f.submit%>
+    <%= f.submit "Post Comment", class: "btn btn-outline-primary btn-sm"%>
 <%end%>
 
 </div>

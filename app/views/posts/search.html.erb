@@ -1,0 +1,15 @@
+<h1>Search Posts</h1>
+
+<%= form_with url: search_posts_path, class: "p-3 border rounded bg-light", method: :get, local: true do %>
+  <%= label_tag :query, "Search Posts" %>
+  <%= text_field_tag :query, params[:query] %>
+  <%= submit_tag "Search" %>
+<% end %>
+
+<h2>Results</h2>
+<% @posts.each do |post| %>
+  <%= render post %>
+<% end %>
+<div class="mt-3 d-flex gap-2">
+      <%= paginate @posts %>
+</div>

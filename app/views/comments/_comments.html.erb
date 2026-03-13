@@ -1,7 +1,20 @@
+  <div class="card mb-3 shadow-sm">
+    <% comments.each do |comment| %>
+      <%= render comment %>
+    <% end %>
+    <div>
+      <%= paginate comments %> <!-- Kaminari pagination links -->
+    </div> 
+  </div>   
   
-  <div class="p-3 border rounded bg-light" id= "comments">
-    <%= render post.comments%>
-  </class=>
-  <%= render "comments/new", post: post%>
+  
+
+
+  <div>
+    <%= render "comments/new", post: post %>
+  </div>
+
+ 
+
 
 

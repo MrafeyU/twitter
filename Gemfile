@@ -18,6 +18,9 @@ gem "stimulus-rails"
 gem "jbuilder"
 
 gem 'pundit', '~> 2.5'
+
+
+gem 'kaminari', '~> 1.2', '>= 1.2.2'
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
 

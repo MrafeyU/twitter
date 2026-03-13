@@ -5,7 +5,7 @@ class PostsController < ApplicationController
 
   # GET /posts or /posts.json
   def index
-    @posts = policy_scope(Post).with_attached_attachments.order(created_at: :desc)
+    @posts = policy_scope(Post).with_attached_attachments.order(created_at: :desc).page(params[:page])
     
   end
 
@@ -13,6 +13,11 @@ class PostsController < ApplicationController
   def show
      authorize @post
     @post.increment!(:views)
+    @comments = @post.comments
+                   .includes(:user)
+                   .order(created_at: :desc)
+                   .page(params[:page])
+                   .per(2)
     # render json: @post
   end
 
@@ -69,12 +74,21 @@ class PostsController < ApplicationController
   end
 
   def remove_attachment
-  @post = Post.find(params[:id])
-  attachment = @post.attachments.find(params[:attachment_id])
-  attachment.purge
+    @post = Post.find(params[:id])
+    attachment = @post.attachments.find(params[:attachment_id])
+    attachment.purge
 
-  redirect_back fallback_location: edit_post_path(@post)
-end
+    redirect_back fallback_location: edit_post_path(@post)
+  end
+
+  def search
+    if params[:query].present?
+      @posts = Post.where("title LIKE ?", "%#{params[:query]}%").page(params[:page]).per(5)
+    else
+      @posts = Post.all.page(params[:page]).per(5)
+    end
+  end
+
 
 end
 
