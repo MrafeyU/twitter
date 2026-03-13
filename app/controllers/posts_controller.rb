@@ -1,15 +1,17 @@
 class PostsController < ApplicationController
-  before_action :set_post, only: %i[ show edit update destroy ]
+  # before_action :set_post, only: %i[ show edit update destroy ]
+  include Postable
   before_action :authenticate_user!, only: %i[ new edit update destroy ]
 
   # GET /posts or /posts.json
   def index
-    @posts = Post.all.with_attached_attachments.order(created_at: :desc)
+    @posts = policy_scope(Post).with_attached_attachments.order(created_at: :desc)
     
   end
 
   # GET /posts/1 or /posts/1.json
   def show
+     authorize @post
     @post.increment!(:views)
     # render json: @post
   end
@@ -17,15 +19,18 @@ class PostsController < ApplicationController
   # GET /posts/new
   def new
     @post = Post.new
+      authorize @post
   end
 
   # GET /posts/1/edit
   def edit
+    authorize @post
   end
 
   # POST /posts or /posts.json
   def create
     @post = Post.new(post_params)
+    authorize @post
 
     respond_to do |format|
       if @post.save
@@ -40,6 +45,7 @@ class PostsController < ApplicationController
 
   # PATCH/PUT /posts/1 or /posts/1.json
   def update
+     authorize @post
     respond_to do |format|
       if @post.update(post_params)
         format.html { redirect_to @post, notice: "Post was successfully updated.", status: :see_other }
@@ -53,6 +59,7 @@ class PostsController < ApplicationController
 
   # DELETE /posts/1 or /posts/1.json
   def destroy
+       authorize @post
     @post.destroy!
 
     respond_to do |format|
@@ -69,14 +76,19 @@ class PostsController < ApplicationController
   redirect_back fallback_location: edit_post_path(@post)
 end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_post
-      @post = Post.find(params.expect(:id))
-    end
-
-    # Only allow a list of trusted parameters through.
-    def post_params
-      params.expect(post: [ :title, :content, :user_id, attachments: [] ])
-    end
 end
+
+
+# authorize @post: 
+# Here’s what happens:
+# Pundit looks for a policy class for the object’s class.
+# For @post (instance of Post), Pundit looks for PostPolicy.
+# It infers the action based on the controller action.
+# For example, in edit, it will try to call PostPolicy#edit?.
+# In update, it calls PostPolicy#update?.
+# It passes the current user to the policy:
+# PostPolicy.new(current_user, @post)
+# The policy returns true or false.
+# If true → execution continues.
+# If false → Pundit::NotAuthorizedError is raised.
+# So basically, authorize checks “does this user have permission to do this action on this object?”
